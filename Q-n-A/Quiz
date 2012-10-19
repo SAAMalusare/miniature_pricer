@@ -1,0 +1,77 @@
+
+
+sub output
+{
+Line 1: print "<ul>"
+	
+Line 2: $conn = mysql_connect("mysql.foo.org:412","kum","overmoon");
+
+Line 3: mysql_select_db( "kum", $conn ); #selects a database
+	
+Line 4: $q = " SELECT * FROM main WHERE id > " . $_GET["id"]. ";";
+Line 5: $res = mysql_query( $q, $conn);
+	
+Line 6: 	while( $row = mysql_fetch_assoc($res) )
+Line 7: 		{
+Line 8: 			print "<li>".$row['description']."</li>";
+Line 9: 		}
+	
+Line 10: print "</ul><br><ul>";
+	
+Line 12: $q = "SELECT * FROM main WHERE id < " . $_GET["id"]. ";";
+Line 13: $res = mysql_query( $q, $conn);
+	
+Line 14: 	while( $row = mysql_fetch_assoc($res) )
+Line 15: 		{
+Line 16: 			print "<li>".$row['description']."</li>";
+Line 17: 		}
+Line 18: 	print "</ul>";
+}
+
+ #Coding Errors:
+  1. Semicolon is missing at Line 1; after print "<ul>"
+  2. Variables scope not defined(declared without my, local, our keyword).
+   
+ #Coding Practice mistakes:
+  1. Improper indentation & too many unwanted loop code.
+  2. Code repetation: Code from line 4 to line 9 is repeating at line 12 to line 17,
+     The mentioned code can be customize by creating a new function (Reusable code).
+  3. Hard coded Datasource name, user name, password etc. 
+ 
+  
+My coding style for the given code : 
+
+# 	my $qry = "SELECT * FROM main WHERE id <". $obj_cgi->param('id');";
+#	$obj_cgi : variable for CGI object;
+#	$str_DSN = variable for Data Source name;
+#	$str_pwd = variable for Password;
+#	$str_user = variable for user name;
+#   $str_dbh = variable for database hanlder
+	
+	sub	display_output
+		{
+			my 	($obj_cgi, $str_DSN, $str_user, $str_pwd, $qry)=(@_);
+			my 	$str_dbh = DBI->connect($str_DSN, $str_user, $str_pwd) or warn "$DBI::errstr\n"; # Connection to DB
+			my 	$sth = $str_dbh->prepare(qq{$qry})or die $str_dbh->errstr; 						 # Preparing query
+				$sth->execute; 																	 # Executing query
+						
+			print '<ul>';
+			
+			while(my @row=$sth->fetchrow_array)
+					{
+						 print  $obj_cgi->Tr({-style=>'color: black; font-size : 15px;', -align=>'left'}, $obj_cgi->li($row['description']))
+					};
+					
+			print '</ul>';		
+		}	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

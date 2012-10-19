@@ -1,0 +1,9 @@
+<DB>
+	<DataBaseLive>
+		<Server>localhost</Server>
+		<Name>miniture</Name>
+		<User>root</User>
+		<Pwd>sa</Pwd>
+	</DataBaseLive>
+</DB>
+<Http_Server>localhost:9090</Http_Server>
